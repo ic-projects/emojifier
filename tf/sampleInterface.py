@@ -11,13 +11,15 @@ from utils import TextLoader
 from model import Model
 
 from six import text_type
-#import raw_input 
+import os
 
 def main():
     initializeModel()
 
 def initializeModel():
-    save_dir = "//media/laurence/Storage/ICHack/emojifier/tf/save/"
+    cwd = os.getcwd()
+    save_dir = cwd + "/save/"
+    print(save_dir)
     with open(os.path.join(save_dir, 'config.pkl'), 'rb') as f:
         saved_args = cPickle.load(f)
     with open(os.path.join(save_dir, 'chars_vocab.pkl'), 'rb') as f:
@@ -30,7 +32,7 @@ def initializeModel():
         if ckpt and ckpt.model_checkpoint_path:
             saver.restore(sess, ckpt.model_checkpoint_path)
             print("Initalized")
-            print(model.sample(sess, chars, vocab, 200, "memes r us", 0.7))
+            print(model.sample(sess, chars, vocab, 200, "memes r us", 0.8))
             message = ""
             while(message != "exit"):
                 message = raw_input("Type your stuff:")
@@ -45,7 +47,7 @@ def sample(prime, chars, sess, vocab, model):
     
 
 
-    return model.sample(sess, chars, vocab, 10, prime, 0.7)
+    return model.sample(sess, chars, vocab, 100, prime, 0.7)
     #print(model.sample(sess, chars, vocab, 10, prime, 0.7))
 
 if __name__ == '__main__':
