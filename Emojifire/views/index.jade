@@ -1,5 +1,12 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    div(class='container')
+      img(src="images/logo.png", "Logo")
+
+      form(action='/parse', method="post")
+        div.input
+          textarea(name="message", placeholder="Enter data to emojify" cols="40", rows="5")
+        div.actions
+          input(type="submit", value="add")
+
