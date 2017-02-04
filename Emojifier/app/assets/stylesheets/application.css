@@ -12,4 +12,10 @@
  *
  *= require_tree .
  *= require_self
+ *= require bootstrap
+ *= require bootstrap-theme
  */
+
+#messages {
+    margin: 20px auto;
+}
