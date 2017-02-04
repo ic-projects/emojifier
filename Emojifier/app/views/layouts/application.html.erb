@@ -9,6 +9,21 @@
   </head>
 
   <body>
-    <%= yield %>
+    <!-- Navigation bar -->
+    <nav class="nav navbar-static-top navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a href="#" class="navbar-brand">Emojifier</a>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Home</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="container">
+      <%= yield %>
+    </section>
+
   </body>
 </html>
