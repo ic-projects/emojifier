@@ -7,9 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="opencsv-3.8" level="project" />
-    <orderEntry type="library" name="commons-lang3-3.5" level="project" />
-    <orderEntry type="library" name="emoji-java-3.1.3" level="project" />
-    <orderEntry type="library" name="json-1.5-20090211" level="project" />
+    <orderEntry type="library" name="dataSorter" level="project" />
   </component>
 </module>
