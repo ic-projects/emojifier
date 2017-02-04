@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item =  Item.new(params.require(:@item).permit(:input, :string, :output, :string))
+    @item =  Item.new(params.require(:@item).permit(:input, :output))
 
     @item.save
 
