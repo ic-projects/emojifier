@@ -21,6 +21,20 @@ $(document).ready(function() {
             $.get("/welcome/pyscript", function (data) {
                 $("#messages").html(data);
             });
+
+            $.ajax({
+                type:"GET",
+                url:"welcome/pyscript",
+                dataType: "json",
+                data: {
+                    item: {
+                        input: $("input[name=message]").val()
+                    }
+                },
+                success: function (data) {
+                    alert(11)
+                }
+            })
         }
     });
 });
