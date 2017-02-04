@@ -17,7 +17,7 @@ def main():
     initializeModel()
 
 def initializeModel():
-    save_dir = 
+    save_dir = "//media/laurence/Storage/ICHack/emojifier/tf/save/"
     with open(os.path.join(save_dir, 'config.pkl'), 'rb') as f:
         saved_args = cPickle.load(f)
     with open(os.path.join(save_dir, 'chars_vocab.pkl'), 'rb') as f:
@@ -26,21 +26,21 @@ def initializeModel():
     with tf.Session() as sess:
         tf.initialize_all_variables().run()
         saver = tf.train.Saver(tf.all_variables())
-        ckpt = tf.train.get_checkpoint_state(args.save_dir)
+        ckpt = tf.train.get_checkpoint_state(save_dir)
         if ckpt and ckpt.model_checkpoint_path:
             saver.restore(sess, ckpt.model_checkpoint_path)
             print("Initalized")
-            print(model.sample(sess, chars, vocab, 200, prime, 0.7))
+            print(model.sample(sess, chars, vocab, 200, "memes r us", 0.7))
             message = ""
             while(message != "exit"):
                 message = raw_input("Type your stuff:")
                 print(message)
-                print(sample(message))
+                print(sample(message, chars, sess, vocab, model))
                 
 
 
 
-def sample(prime, chars, sess, vocab):
+def sample(prime, chars, sess, vocab, model):
     charsList, probs = model.rawsample(sess, chars, vocab, prime)
     
 
