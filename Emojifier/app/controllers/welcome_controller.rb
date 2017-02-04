@@ -1,15 +1,31 @@
 class WelcomeController < ApplicationController
 
   def index
-
+    @items = Item.all
   end
 
   def pyscript
-    pid = fork do
-      exec "python lib/assets/py/Main.py 2>&1"
-    end
-    Process.detach(pid)
+    # expects a JSON with @item as name and fields :input of type :string
+    input = params[:item][:input]
+
+
+    #get ML output
+    thr = Thread.new { puts "Whats the big deal" }
+
+
+    output = ''
+
+
+
+    jsonitem = ActionController::Parameters.new({
+                                                    item: {
+                                                        input: input,
+                                                        output: output
+                                                    }
+                                                })
+    render :json => jsonitem
   end
+
 
   def pysave
     # expects a JSON with @item as name and fields :input of type :string
