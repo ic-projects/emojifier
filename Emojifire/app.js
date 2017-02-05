@@ -11,7 +11,7 @@ var parse = require('./routes/parse');
 var app = express();
 
 global.spawn = require('child_process').spawn;
-global.bgProc = spawn('python', ['/home/qiang/emojifier/Emojifire/routes/Main.py'], {
+global.bgProc = spawn('python', ['//Users/mfournial/OneDrive - Imperial College London/Documents/Imperial/year1/ichack17/emojifier/Emojifire/routes/Main.py'], {
     detached: true
 });
 
@@ -44,7 +44,7 @@ app.get('/listItems', function (req, res) {
 //     }
 // }
 
-var newUser = {
+var newItem = {
     "foo": {
         "input": "test11ADD",
         "output": "test11ADDoutput"
@@ -52,16 +52,16 @@ var newUser = {
 };
 
 
-app.post('/addUser', function (req, res) {
+app.post('/addItem', function (req, res) {
     fs.readFile( __dirname + "/Mike/" + "items.json", 'utf8', function (err, data) {
         // Gets the db
         data = JSON.parse(data);
 
         var keys = [];
-        for (var k in newUser) {
+        for (var k in newItem) {
           keys.push(k);
         }
-        data[keys[0]] = newUser[keys[0]];
+        data[keys[0]] = newItem[keys[0]];
 
         console.log(data);
         res.send(JSON.stringify(ds));

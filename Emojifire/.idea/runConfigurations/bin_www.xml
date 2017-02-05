@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" activateToolWindowBeforeRun="false" path-to-node="project" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" activateToolWindowBeforeRun="false" path-to-node="/usr/local/Cellar/node/7.5.0/bin/node" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
     <envs>
       <env name="DEBUG" value="Emojifire:*" />
     </envs>
