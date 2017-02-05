@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" activateToolWindowBeforeRun="false" path-to-node="/usr/local/Cellar/node/7.5.0/bin/node" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" activateToolWindowBeforeRun="false" path-to-node="project" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
     <envs>
       <env name="DEBUG" value="Emojifire:*" />
     </envs>
-    <browser name="e5120d43-2c3f-47ef-9f26-65e539e05186" start="true" url="http://localhost:3000/" />
+    <browser start="true" url="http://localhost:3000/" />
     <profiling v8-profiler-path="" />
     <EXTENSION ID="com.jetbrains.nodejs.remote.docker.NodeJSDockerRunConfigurationExtension">
       <option name="envVars">
@@ -30,7 +30,7 @@
       <profiling v8-profiler-path="" />
     </EXTENSION>
     <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
-      <browser name="e5120d43-2c3f-47ef-9f26-65e539e05186" start="true" url="http://localhost:3000/" />
+      <browser start="true" url="http://localhost:3000/" />
     </EXTENSION>
     <method />
   </configuration>

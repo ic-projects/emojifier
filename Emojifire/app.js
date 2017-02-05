@@ -7,13 +7,14 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var parse = require('./routes/parse');
+var net = require('net');
+
+// global.client = new net.Socket();
+// global.client.connect(8080, '129.31.204.44', function() {
+//     console.log("Connected");
+// });
 
 var app = express();
-
-global.spawn = require('child_process').spawn;
-global.bgProc = spawn('python', ['//Users/mfournial/OneDrive - Imperial College London/Documents/Imperial/year1/ichack17/emojifier/Emojifire/routes/Main.py'], {
-    detached: true
-});
 
 /***********************************************************************************************************************
  *  RESTful API for requesting DB requests
