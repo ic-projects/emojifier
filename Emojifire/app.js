@@ -15,6 +15,66 @@ global.bgProc = spawn('python', ['/home/qiang/emojifier/Emojifire/routes/Main.py
     detached: true
 });
 
+/***********************************************************************************************************************
+ *  RESTful API for requesting DB requests
+ *  Call mfournial before any modification
+ **********************************************************************************************************************/
+
+// DB MIKE Serving client RUN
+var fs = require("fs");
+
+
+
+// Get the json database file to be read by fs
+// Prints the entire JSON DB visiting '/listItems'
+app.get('/listItems', function (req, res) {
+    fs.readFile( __dirname + "/Mike/" + "items.json", 'utf8', function (err, data) {
+        console.log( data );
+        res.end( data );
+    });
+});
+
+// Do some AJAX Requesting to get the user's input
+// The var must contain an object of JSON the key is irrelevant
+// fields are :input -> stringProcessable, :output -> stringProcessable
+// var newItem = {
+//     "foo" : {
+//         "input": `INPUT TEXT`,
+//         "output": `OUTPUT TEXT`
+//     }
+// }
+
+var newUser = {
+    "foo": {
+        "input": "test11ADD",
+        "output": "test11ADDoutput"
+    }
+};
+
+
+app.post('/addUser', function (req, res) {
+    fs.readFile( __dirname + "/Mike/" + "items.json", 'utf8', function (err, data) {
+        // Gets the db
+        data = JSON.parse(data);
+
+        var keys = [];
+        for (var k in newUser) {
+          keys.push(k);
+        }
+        data[keys[0]] = newUser[keys[0]];
+
+        console.log(data);
+        res.send(JSON.stringify(ds));
+    });
+});
+
+/***********************************************************************************************************************
+ *   END OF RESTful API
+ *   For your pleasure
+ *   Hope you're not reading this at 2am
+ **********************************************************************************************************************/
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
