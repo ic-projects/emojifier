@@ -9,11 +9,6 @@ var index = require('./routes/index');
 var parse = require('./routes/parse');
 var net = require('net');
 
-// global.client = new net.Socket();
-// global.client.connect(8080, '129.31.204.44', function() {
-//     console.log("Connected");
-// });
-
 var app = express();
 
 /***********************************************************************************************************************
