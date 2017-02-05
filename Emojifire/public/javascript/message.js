@@ -1,4 +1,8 @@
 $(document).ready(function() {
+    $('form[name=emojify]').submit(function(event) {
+        event.preventDefault();
+    });
+
     $('input[name=message]').keyup(function(event) {
         event.preventDefault();
 
@@ -17,6 +21,7 @@ $(document).ready(function() {
     });
 
     $('input[name=message]').on('input', function(event) {
+        event.preventDefault();
         if ($('input[name=message]').val().length == 0) {
             $("#messages").html("<h class='text-center'>What do you want to emojify?</h>");
         }
