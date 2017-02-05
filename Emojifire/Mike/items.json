@@ -1,0 +1,31 @@
+{
+  "1" : {
+    "input" : "test1",
+    "output" : "test1OUT"
+  },
+  "2" : {
+    "input" : "test2",
+    "output" : "test2OUT"
+  },
+  "3" : {
+    "input" : "test3",
+    "output" : "test3OUT"
+  },
+  "4" : {
+    "input" : "test4",
+    "output" : "test4OUT"
+  },
+  "5" : {
+    "input" : "test5",
+    "output" : "test5OUT"
+  },
+  "6" : {
+    "input" : "test6",
+    "output" : "test6OUT"
+  },
+  "7" : {
+    "input" : "test7",
+    "output" : "test7OUT"
+  }
+
+}
