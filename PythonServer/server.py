@@ -1,6 +1,6 @@
 import socket
 
-TCP_IP = '129.31.204.44'
+TCP_IP = '129.31.212.117'
 TCP_PORT = 8080
 BUFFER_SIZE = 957  # Normally 1024, but we want fast response
 
@@ -16,4 +16,5 @@ while True:
     data = conn.recv(BUFFER_SIZE)
     if data:
         print "received data:", data
+
     conn.close()

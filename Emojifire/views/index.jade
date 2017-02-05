@@ -8,5 +8,12 @@ block content
     div.well
       h1#messages.h1.text-center What should you Emojify?
 
-    form(name='emojify', action='/parse', method="post")
-      input(type="text", name="message", class="form-control", placeholder="Enter text to emojify" cols="80", rows="2")
+    form(name='emojify', action='/parse', method="post", class="form-vertical")
+      div.form-group
+        input(type="text", name="message", class="form-control", placeholder="Enter text to emojify" cols="80", rows="2")
+
+      //div.form-group
+      //  div.checkbox
+      //    label
+      //      input(type='checkbox', name='extend')
+      //      | Memify my message!

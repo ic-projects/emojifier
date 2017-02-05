@@ -7,3 +7,17 @@ body {
 a {
   color: #00B7FF;
 }
+
+#messages {
+  font-size: 25px;
+  line-height: 30px;
+}
+
+#messages .emoji {
+  height: 26px;
+  width: 26px;
+}
+
+label {
+  display: block;
+}
