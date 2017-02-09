@@ -7,7 +7,7 @@ router.post('/', function(req, res, next) {
     var message = req.body.message.toLowerCase().replace(/[^a-z ]/gi,'');
 
     var client = new net.Socket();
-    client.connect(8080, '129.31.212.117', function() {
+    client.connect(3000, 'localhost', function() {
         console.log("Connected.");
         client.write(message);
     });

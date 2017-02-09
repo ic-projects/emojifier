@@ -1021,9 +1021,9 @@ probs = [0.002855996020031353, 0.003025802235011079, 0.003344821145281501, 0.013
 
 model = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
 
-TCP_IP = '129.31.212.117'
-TCP_PORT = 8080
-BUFFER_SIZE = 957  # Normally 1024, but we want fast response
+TCP_IP = 'localhost'
+TCP_PORT = 3000
+BUFFER_SIZE = 1024  # Normally 2048, but we want fast response
 
 
 def qiang(message):
@@ -1110,8 +1110,8 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
 s.listen(1)
 
-print("Biach, your' hear")
-conn, addr = s.accept()
+print("You're now on air")
+#conn, addr = s.accept()
 
 while True:
     conn, addr = s.accept()
