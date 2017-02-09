@@ -9,13 +9,13 @@ a {
 }
 
 #messages {
-  font-size: 25px;
+  font-size: 30px;
   line-height: 30px;
 }
 
 #messages .emoji {
-  height: 26px;
-  width: 26px;
+  height: 30px;
+  width: 30px;
 }
 
 label {
