@@ -8,7 +8,7 @@ router.post('/', function(req, res, next) {
 
     var client = new net.Socket();
     client.connect(3000, 'localhost', function() {
-        console.log("Connected.");
+        console.log("Connected.  " + message );
         client.write(message);
     });
 
