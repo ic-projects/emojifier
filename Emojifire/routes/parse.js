@@ -4,7 +4,7 @@ var router = express.Router();
 
 /* POST users listing. */
 router.post('/', function(req, res, next) {
-    var message = req.body.message.toLowerCase().replace(/[^a-z ]/gi,'');
+    var message = req.body.message;
 
     var client = new net.Socket();
     client.connect(3000, 'localhost', function() {

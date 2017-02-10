@@ -406,10 +406,10 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
         ['autumn', 'fallen', 'leaf'], ['herb'], ['ear', 'rice'], ['mushroom'], ['cactus'], ['palm', 'tree'],
         ['wood', 'evergreen', 'tree'], ['wood', 'deciduous', 'tree'], ['chestnut'], ['plant', 'seedling'], ['blossom'],
         ['world', 'global', 'international', 'globe', 'meridians'], ['summer', 'sun'], ['full', 'moon'],
-        ['new', 'moon'], ['new', 'moon'], ['waxing', 'crescent', 'moon'], ['first', 'quarter', 'moon'],
+        ['moon'], ['moon'], ['waxing', 'crescent', 'moon'], ['quarter', 'moon'],
         ['moon', 'waxing', 'gibbous', 'moon'], ['full', 'moon'], ['waning', 'gibbous', 'moon'],
-        ['last', 'quarter', 'moon'], ['waning', 'crescent', 'moon'], ['last', 'quarter', 'moon'],
-        ['first', 'quarter', 'moon'], ['night', 'crescent', 'moon'],
+        ['quarter', 'moon'], ['waning', 'crescent', 'moon'], ['quarter', 'moon'],
+        ['quarter', 'moon'], ['night', 'crescent', 'moon'],
         ['globe', 'world', 'international', 'earth', 'africa'],
         ['globe', 'world', 'international', 'earth', 'americas'], ['globe', 'world', 'international', 'earth', 'asia'],
         ['volcano'], ['milky', 'way'], ['stars'], ['star'], ['weather', 'sunny'],
@@ -718,6 +718,7 @@ threshold = 0.01 # score at which emoji is chosen
 num_emojis = 3 # maximum number of emojis to return
 decay_choose = 3 # decay in emoji value based on how many emojis already chosen
 
+num_words = 3 # maximum number of words to be considered
 decay_words = 20 # decay in word value based on how far back it is
 
 sim_weight = 5 # determines weight (exponent) applied to similarity of *individual* tags
@@ -725,39 +726,62 @@ sim_weight = 5 # determines weight (exponent) applied to similarity of *individu
 memeifier_on = False # full memeification on or off
 emojifier_on = False # full emojification on or off
 
-def sample(prime):
+def sample(old_prime, prime):
+
+    old_prime = prime.strip()
+    old_words = prime.split()
+
     prime = prime.strip()
     words = prime.split()
 
-    emojistoadd = []
+    change_index = -1
 
-    for i in range(len(words)):
+    if len(words) > len(old_words):
+        change_index = len(words) - 1
+    else:
+        for i in range (len(words) - 1, -1, -1):
+            if words[i] != old_words[i]:
+                change_index = i
+                break
+
+    for i in range(max(0, change_index - num_words + 1), change_index + 1):
         if (i == 0):
-            values = getValue(words[0])
+            values = getValue(depunctuate(words[0]))
         else:
-            values = [x + y for x, y in zip(map(lambda x: x / decay_words, values), getValue(words[i]))]
-        sortedemo = sorted(zip(emojis, values), key = lambda x: x[1])
-        toappend = ""
-        for i in range(num_emojis):
-            e, v = sortedemo[-(i + 1)]
-            if v >= threshold * (1 + decay_choose * i / num_emojis):
-                toappend += e
-        emojistoadd.append(toappend)
+            values = [x + y for x, y in zip(map(lambda x: x / decay_words, values), getValue(depunctuate(words[i])))]
+    
+    sortedemo = sorted(zip(emojis, values), key = lambda x: x[1])
+    emojistoadd = ""
+    for i in range(num_emojis):
+        e, v = sortedemo[-(i + 1)]
+        if v >= threshold * (1 + decay_choose * i / num_emojis):
+            emojistoadd += e
 
     finalstring = ""
-    for i in range(len(words)):
+    for i in range(change_index + 1):
         finalstring += " "
         finalstring += words[i]
-        if (not (emojistoadd[i] == '')):
+    if (not (emojistoadd == "")):
+        finalstring += " "
+        finalstring += emojistoadd
+    if (change_index < len(words) - 1):
+        for i in range(change_index + 1, len(words)):
             finalstring += " "
-            finalstring += emojistoadd[i]
+            finalstring += words[i]
 
     if memeifier_on:
-        finalstring = memeify(finalstring)
+        depunctuated = depunctuate(finalstring) + " "
+        meme = memeify(depunctuated)
+        finalstring = finalstring + meme[len(depunctuated) - 1:]
+
     if emojifier_on:
         finalstring = emojify(finalstring)
 
     return finalstring[1:]
+
+
+def depunctuate(string):
+    return ''.join(filter(lambda c: str.isalpha(c) or c == ' ', string)).lower()
 
 
 def getValue(lastword):
@@ -834,6 +858,8 @@ TCP_IP = 'localhost'
 TCP_PORT = 3000
 BUFFER_SIZE = 1024
 
+old_data = ''
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
 s.listen(1)
@@ -842,8 +868,9 @@ print("Server is running.")
 
 while True:
     conn, addr = s.accept()
+    old_data = data
     data = conn.recv(BUFFER_SIZE)
     if data:
-        conn.send(sample(data))
+        conn.send(sample(old_data,data))
 
     conn.close()

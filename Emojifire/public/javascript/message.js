@@ -5,19 +5,16 @@ $(document).ready(function() {
 
     $('input[name=message]').keyup(function(event) {
         event.preventDefault();
-
-        if (event.keyCode == 13 || event.keyCode == 32) {
-            $.ajax({
-                type: 'POST',
-                url: '/parse',
-                data: {
-                    message: $('input[name=message]').val()
-                },
-                success: function(data) {
-                    $('#messages').html(twemoji.parse(data));
-                }
-            });
-        }
+        $.ajax({
+            type: 'POST',
+            url: '/parse',
+            data: {
+                message: $('input[name=message]').val()
+            },
+            success: function(data) {
+                $('#messages').html(twemoji.parse(data));
+            }
+        });
     });
 
     $('input[name=message]').on('input', function(event) {
