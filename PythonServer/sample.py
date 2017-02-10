@@ -711,7 +711,7 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
 
 ## EMOJIFIER - CORE ##
 
-model = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
+wordvec = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
 
 threshold = 0.01 # score at which emoji is chosen
 
@@ -768,8 +768,8 @@ def getValue(lastword):
 
 
 def getsimilarity(lastword, tocheck):
-    if ((lastword in model.vocab) and (tocheck in model.vocab)):
-        return model.similarity(lastword, tocheck)
+    if ((lastword in wordvec.vocab) and (tocheck in wordvec.vocab)):
+        return wordvec.similarity(lastword, tocheck)
     else:
         return 0
 
