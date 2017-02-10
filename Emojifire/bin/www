@@ -84,10 +84,10 @@ function onError(error) {
 function onListening() {
   // var addr = server.address();
   var addr = { address: "10.0.0.4",
-		family: "IPv4", port: 8080 };
+		family: "IPv4", port: 80 };
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  console.log(addr);
+  console.log("You're on air");
   debug('Listening on ' + bind);
 }
