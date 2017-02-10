@@ -744,18 +744,20 @@ def sample(old_prime, prime):
                 change_index = i
                 break
 
+    values = []
     for i in range(max(0, change_index - num_words + 1), change_index + 1):
         if (i == 0):
             values = getValue(depunctuate(words[0]))
         else:
             values = [x + y for x, y in zip(map(lambda x: x / decay_words, values), getValue(depunctuate(words[i])))]
     
-    sortedemo = sorted(zip(emojis, values), key = lambda x: x[1])
     emojistoadd = ""
-    for i in range(num_emojis):
-        e, v = sortedemo[-(i + 1)]
-        if v >= threshold * (1 + decay_choose * i / num_emojis):
-            emojistoadd += e
+    if values != []:
+        sortedemo = sorted(zip(emojis, values), key = lambda x: x[1])
+        for i in range(num_emojis):
+            e, v = sortedemo[-(i + 1)]
+            if v >= threshold * (1 + decay_choose * i / num_emojis):
+                emojistoadd += e
 
     finalstring = ""
     for i in range(change_index + 1):
@@ -858,7 +860,7 @@ TCP_IP = 'localhost'
 TCP_PORT = 3000
 BUFFER_SIZE = 1024
 
-old_data = ''
+data = ''
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
