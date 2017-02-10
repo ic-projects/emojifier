@@ -770,7 +770,7 @@ def sample(old_prime, prime):
             finalstring += words[i]
 
     if memeifier_on:
-        depunctuated = depunctuate(finalstring) + " "
+        depunctuated = depunctuate(finalstring)
         meme = memeify(depunctuated)
         finalstring = finalstring + meme[len(depunctuated) - 1:]
 
