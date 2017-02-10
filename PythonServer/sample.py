@@ -9,6 +9,11 @@ import socket
 
 import gensim
 import numpy as np
+import tensorflow as tf
+
+from six.moves import cPickle
+
+from model import Model
 
 reload(sys)
 sys.setdefaultencoding('UTF8')
@@ -704,11 +709,9 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
         ['biohazard', 'biohazard', 'biohazard', 'sign', 'toxic', 'nasty'], ['left', 'speech', 'bubble'],
         ['eye', 'speech', 'bubble', 'witness']]
 
-model = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
+## EMOJIFIER - CORE ##
 
-TCP_IP = 'localhost'
-TCP_PORT = 3000
-BUFFER_SIZE = 1024
+model = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
 
 threshold = 0.01 # score at which emoji is chosen
 
@@ -719,7 +722,10 @@ decay_words = 20 # decay in word value based on how far back it is
 
 sim_weight = 5 # determines weight (exponent) applied to similarity of *individual* tags
 
-def sample(prime):    
+memeifier_on = False # full memeification on or off
+emojifier_on = False # full emojification on or off
+
+def sample(prime):
     prime = prime.strip()
     words = prime.split()
 
@@ -745,6 +751,12 @@ def sample(prime):
         if (not (emojistoadd[i] == '')):
             finalstring += " "
             finalstring += emojistoadd[i]
+
+    if memeifier_on:
+        finalstring = memeify(finalstring)
+    if emojifier_on:
+        finalstring = emojify(finalstring)
+
     return finalstring[1:]
 
 
@@ -774,16 +786,59 @@ def findtag(lastword, localtags):
     else:
         return 0
 
+## EMOJIFIER - FULL ##
+
+alphabet = "abcdefghijklmnopqrstuvwxyz"
+
+emojibet = [('🅰').decode('utf-8'), ('🅱').decode('utf-8'), ('©').decode('utf-8'), ('↩').decode('utf-8'),
+          ('🎼').decode('utf-8'), ('🎏').decode('utf-8'), ('🌊').decode('utf-8'), ('🙌').decode('utf-8'),
+          ('ℹ').decode('utf-8'), ('🎷').decode('utf-8'), ('🎋').decode('utf-8'), ('🕒').decode('utf-8'),
+          ('Ⓜ').decode('utf-8'), ('♑').decode('utf-8'), ('⚙️').decode('utf-8'), ('🅿').decode('utf-8'),
+          ('🔍').decode('utf-8'), ('®️️').decode('utf-8'), ('⚡').decode('utf-8'), ('🌴').decode('utf-8'),
+          ('⛎').decode('utf-8'), ('♈').decode('utf-8'), ('📈').decode('utf-8'), ('⚒').decode('utf-8'),
+          ('✌').decode('utf-8'), ('Ⓩ').decode('utf-8')]
+
+def emojify(message):
+    return_message = ""
+    for c in message:
+        if c in alphabet:
+            return_message += emojibet[alphabet.index(c)]
+        else:
+            return_message += c
+    return return_message
+
+## MEMEIFIER ##
+
+args_save_dir ='save'
+args_n = 500
+args_sample = -2
+with open(os.path.join(args_save_dir, 'config.pkl'), 'rb') as f:
+    saved_args = cPickle.load(f)
+with open(os.path.join(args_save_dir, 'chars_vocab.pkl'), 'rb') as f:
+    chars, vocab = cPickle.load(f)
+model = Model(saved_args, True, useDropout=False)
+init = tf.global_variables_initializer()
+sess = tf.Session()
+sess.run(init)
+saver = tf.train.Saver(tf.global_variables())
+ckpt = tf.train.get_checkpoint_state(args_save_dir)
+if ckpt and ckpt.model_checkpoint_path:
+    saver.restore(sess, ckpt.model_checkpoint_path)
+
+def memeify(args_prime):
+    return model.sample(sess, chars, vocab, args_n, args_prime, args_sample)
+
+## SERVER ##
+
+TCP_IP = 'localhost'
+TCP_PORT = 3000
+BUFFER_SIZE = 1024
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
 s.listen(1)
 
 print("Server is running.")
-
-while True:
-    message = raw_input("Input a string: ")
-    print(sample(message))
 
 while True:
     conn, addr = s.accept()
