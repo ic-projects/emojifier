@@ -540,7 +540,7 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
         ['taurus'], ['gemini'], ['cancer'], ['leo'], ['virgo'], ['libra'], ['scorpius'], ['sagittarius'], ['capricorn'],
         ['aquarius'], ['pisces'], ['ophiuchus'], ['six', 'pointed', 'star'], ['atm'],
         ['finance', 'stock', 'office', 'bank', 'chart'], ['rich', 'money', 'dollars', 'heavy', 'dollar', 'sign'],
-        ['currency', 'exchange'], ['copyright', 'patent'], ['registered'], ['trademark', 'trade', 'mark', 'tm'], ['no'],
+        ['currency', 'exchange'], ['copyright', 'patent'], ['registered'], ['trademark', 'trade', 'mark', 'tm'],
         ['surprise', 'bangbang'], ['interrobang'], ['bang', 'exclamation', 'heavy', 'exclamation', 'mark'],
         ['confused', 'question'], ['grey', 'exclamation'], ['grey', 'question'], ['top'], ['end'], ['back'], ['soon'],
         ['arrows', 'clockwise'], ['clock12'], ['clock1230'], ['clock1'], ['clock130'], ['time', 'watch', 'clock2'],
