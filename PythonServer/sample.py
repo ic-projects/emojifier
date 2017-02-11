@@ -713,7 +713,7 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
 
 wordvec = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
 
-threshold = 0.01 # score at which emoji is chosen
+threshold = 0 # score at which emoji is chosen
 
 num_emojis = 3 # maximum number of emojis to return
 decay_choose = 3 # decay in emoji value based on how many emojis already chosen
@@ -728,8 +728,8 @@ emojifier_on = False # full emojification on or off
 
 def sample(old_prime, prime):
 
-    old_prime = prime.strip()
-    old_words = prime.split()
+    old_prime = old_prime.strip()
+    old_words = old_prime.split()
 
     prime = prime.strip()
     words = prime.split()
@@ -758,18 +758,15 @@ def sample(old_prime, prime):
             e, v = sortedemo[-(i + 1)]
             if v >= threshold * (1 + decay_choose * i / num_emojis):
                 emojistoadd += e
-
+    
+    if (not (emojistoadd == "")):
+        words[i] += " "
+        words[i] += emojistoadd
+    
     finalstring = ""
-    for i in range(change_index + 1):
+    for i in range(len(words)):
         finalstring += " "
         finalstring += words[i]
-    if (not (emojistoadd == "")):
-        finalstring += " "
-        finalstring += emojistoadd
-    if (change_index < len(words) - 1):
-        for i in range(change_index + 1, len(words)):
-            finalstring += " "
-            finalstring += words[i]
 
     if memeifier_on:
         depunctuated = depunctuate(finalstring)
@@ -867,6 +864,16 @@ s.bind((TCP_IP, TCP_PORT))
 s.listen(1)
 
 print("Server is running.")
+
+string = ""
+while True:
+    next_char = raw_input("enter next char: ")
+    old_string = string
+    string = string + next_char
+    print("old string was: " + old_string)
+    print("string is: " + string)
+    print(sample(old_string,string))
+    
 
 while True:
     conn, addr = s.accept()
