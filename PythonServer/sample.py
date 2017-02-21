@@ -713,15 +713,15 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
 
 wordvec = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
 
-threshold = 0.01 # score at which emoji is chosen
+threshold = 0.03 # score at which emoji is chosen
 
 num_emojis = 3 # maximum number of emojis to return
-decay_choose = 16 # decay in emoji value based on how many emojis already chosen
+decay_choose = 10 # decay in emoji value based on how many emojis already chosen
 
 num_words = 1 # maximum number of words to be considered
-decay_words = 20 # decay in word value based on how far back it is
+decay_words = 7 # decay in word value based on how far back it is
 
-sim_weight = 5 # determines weight (exponent) applied to similarity of *individual* tags
+sim_weight = 3 # determines weight (exponent) applied to similarity of *individual* tags
 
 memeifier_on = False # full memeification on or off
 emojifier_on = False # full emojification on or off
@@ -749,6 +749,10 @@ def sample(old_prime, prime):
         if i >= len(words):
             selected_emojis[i] = ""
 
+    if len(words) == 1:
+        change_indices = [0]
+        selected_emojis[0] = ""
+
     for change_index in change_indices:
         values = []
         for i in range(max(0, change_index - num_words + 1), change_index + 1):
@@ -768,8 +772,6 @@ def sample(old_prime, prime):
         if not emojistoadd == "":
             selected_emojis[change_index] = " "
             selected_emojis[change_index] += emojistoadd
-
-    print(selected_emojis)
 
     finalstring = ""
     for i in range(len(words)):
