@@ -713,10 +713,10 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
 
 wordvec = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
 
-threshold = 0 # score at which emoji is chosen
+threshold = 0.025 # score at which emoji is chosen
 
 num_emojis = 3 # maximum number of emojis to return
-decay_choose = 3 # decay in emoji value based on how many emojis already chosen
+decay_choose = 10 # decay in emoji value based on how many emojis already chosen
 
 num_words = 1 # maximum number of words to be considered
 decay_words = 20 # decay in word value based on how far back it is
@@ -786,7 +786,6 @@ def sample(old_prime, prime):
         finalstring = emojify(finalstring)
 
     return finalstring[1:]
-
 
 def depunctuate(string):
     return ''.join(filter(lambda c: str.isalpha(c) or c == ' ', string)).lower()
