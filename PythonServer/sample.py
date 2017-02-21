@@ -619,7 +619,7 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
         ['tonga'], ['trinidad and tobago'], ['tunisia'], ['turkey'],
         ['turkmenistan'], ['turks and caicos islands'], ['tuvalu'],
         ['uganda'], ['ukraine'], ['united arab emirates'],
-        ['united kingdom','uk'], ['uruguay'],
+        ['united kingdom', 'uk'], ['uruguay'],
         ['united states of america', 'us', 'america', 'usa'],
         ['us virgin islands'], ['uzbekistan'], ['st vincent grenadines'],
         ['vanuatu'], ['venezuela'], ['vietnam'], ['yemen'],
@@ -718,13 +718,15 @@ threshold = 0 # score at which emoji is chosen
 num_emojis = 3 # maximum number of emojis to return
 decay_choose = 3 # decay in emoji value based on how many emojis already chosen
 
-num_words = 3 # maximum number of words to be considered
+num_words = 1 # maximum number of words to be considered
 decay_words = 20 # decay in word value based on how far back it is
 
 sim_weight = 5 # determines weight (exponent) applied to similarity of *individual* tags
 
 memeifier_on = False # full memeification on or off
 emojifier_on = False # full emojification on or off
+
+selected_emojis = []
 
 def sample(old_prime, prime):
 
@@ -734,39 +736,46 @@ def sample(old_prime, prime):
     prime = prime.strip()
     words = prime.split()
 
-    change_index = -1
+    change_indices = []
+    for i in range(0, len(words)):
+        if i >= len(old_words):
+            change_indices.append(i)
+        elif words[i] != old_words[i]:
+            change_indices.append(i)
 
-    if len(words) > len(old_words):
-        change_index = len(words) - 1
-    else:
-        for i in range (len(words) - 1, -1, -1):
-            if words[i] != old_words[i]:
-                change_index = i
-                break
+        if i >= len(selected_emojis):
+            selected_emojis.append("")
+    for i in range(0, len(selected_emojis)):
+        if i >= len(words):
+            selected_emojis[i] = ""
 
-    values = []
-    for i in range(max(0, change_index - num_words + 1), change_index + 1):
-        if (i == 0):
-            values = getValue(depunctuate(words[0]))
-        else:
-            values = [x + y for x, y in zip(map(lambda x: x / decay_words, values), getValue(depunctuate(words[i])))]
+    for change_index in change_indices:
+        values = []
+        for i in range(max(0, change_index - num_words + 1), change_index + 1):
+            if i == max(0, change_index - num_words + 1):
+                values = getValue(depunctuate(words[i]))
+            else:
+                values = [x + y for x, y in zip(map(lambda x: x / decay_words, values), getValue(depunctuate(words[i])))]
     
-    emojistoadd = ""
-    if values != []:
-        sortedemo = sorted(zip(emojis, values), key = lambda x: x[1])
-        for i in range(num_emojis):
-            e, v = sortedemo[-(i + 1)]
-            if v >= threshold * (1 + decay_choose * i / num_emojis):
-                emojistoadd += e
+        emojistoadd = ""
+        if values != []:
+            sortedemo = sorted(zip(emojis, values), key = lambda x: x[1])
+            for i in range(num_emojis):
+                e, v = sortedemo[-(i + 1)]
+                if v >= threshold * (1 + decay_choose * i / num_emojis):
+                    emojistoadd += e
     
-    if (not (emojistoadd == "")):
-        words[i] += " "
-        words[i] += emojistoadd
-    
+        if not emojistoadd == "":
+            selected_emojis[change_index] = " "
+            selected_emojis[change_index] += emojistoadd
+
+    print(selected_emojis)
+
     finalstring = ""
     for i in range(len(words)):
         finalstring += " "
         finalstring += words[i]
+        finalstring += selected_emojis[i]
 
     if memeifier_on:
         depunctuated = depunctuate(finalstring)
@@ -791,7 +800,7 @@ def getValue(lastword):
 
 
 def getsimilarity(lastword, tocheck):
-    if ((lastword in wordvec.vocab) and (tocheck in wordvec.vocab)):
+    if lastword in wordvec.vocab and tocheck in wordvec.vocab:
         return wordvec.similarity(lastword, tocheck)
     else:
         return 0
@@ -804,7 +813,7 @@ def similarity(lastword, localtags):
 
 
 def findtag(lastword, localtags):
-    if (lastword in localtags):
+    if lastword in localtags:
         return threshold * 5
     else:
         return 0
@@ -867,13 +876,12 @@ print("Server is running.")
 
 string = ""
 while True:
-    next_char = raw_input("enter next char: ")
+    new_string = raw_input("enter new input: ")
     old_string = string
-    string = string + next_char
+    string = new_string
     print("old string was: " + old_string)
     print("string is: " + string)
     print(sample(old_string,string))
-    
 
 while True:
     conn, addr = s.accept()
