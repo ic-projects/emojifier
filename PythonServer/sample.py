@@ -716,9 +716,9 @@ wordvec = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews
 threshold = 0.01 # score at which emoji is chosen
 
 num_emojis = 3 # maximum number of emojis to return
-decay_choose = 3 # decay in emoji value based on how many emojis already chosen
+decay_choose = 10 # decay in emoji value based on how many emojis already chosen
 
-num_words = 3 # maximum number of words to be considered
+num_words = 1 # maximum number of words to be considered
 decay_words = 20 # decay in word value based on how far back it is
 
 sim_weight = 5 # determines weight (exponent) applied to similarity of *individual* tags
@@ -726,18 +726,23 @@ sim_weight = 5 # determines weight (exponent) applied to similarity of *individu
 memeifier_on = False # full memeification on or off
 emojifier_on = False # full emojification on or off
 
+translated_words = []
+
 def sample(old_prime, prime):
 
-    old_prime = prime.strip()
-    old_words = prime.split()
+    old_prime = old_prime.strip()
+    old_words = old_prime.split()
 
     prime = prime.strip()
     words = prime.split()
 
     change_index = -1
 
+    if len(words) < len(old_words):
+        translated_words.pop()
     if len(words) > len(old_words):
         change_index = len(words) - 1
+        translated_words.append("")
     else:
         for i in range (len(words) - 1, -1, -1):
             if words[i] != old_words[i]:
@@ -746,11 +751,11 @@ def sample(old_prime, prime):
 
     values = []
     for i in range(max(0, change_index - num_words + 1), change_index + 1):
-        if (i == 0):
-            values = getValue(depunctuate(words[0]))
+        if (i == max(0, change_index - num_words + 1)):
+            values = getValue(depunctuate(words[i]))
         else:
             values = [x + y for x, y in zip(map(lambda x: x / decay_words, values), getValue(depunctuate(words[i])))]
-    
+
     emojistoadd = ""
     if values != []:
         sortedemo = sorted(zip(emojis, values), key = lambda x: x[1])
@@ -759,16 +764,14 @@ def sample(old_prime, prime):
             if v >= threshold * (1 + decay_choose * i / num_emojis):
                 emojistoadd += e
 
-    finalstring = ""
-    for i in range(change_index + 1):
-        finalstring += " "
-        finalstring += words[i]
     if (not (emojistoadd == "")):
+        translated_words[change_index] = words[change_index] + " " + emojistoadd
+    finalstring = ""
+    for i in range(len(words)):
         finalstring += " "
-        finalstring += emojistoadd
-    if (change_index < len(words) - 1):
-        for i in range(change_index + 1, len(words)):
-            finalstring += " "
+        if translated_words[i] != "":
+            finalstring += translated_words[i]
+        else:
             finalstring += words[i]
 
     if memeifier_on:
