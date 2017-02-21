@@ -873,14 +873,14 @@ s.listen(1)
 
 print("Server is running.")
 
-string = ""
-while True:
-    new_string = raw_input("enter new input: ")
-    old_string = string
-    string = new_string
-    print("old string was: " + old_string)
-    print("string is: " + string)
-    print(sample(old_string,string))
+#string = ""
+#while True:
+#    new_string = raw_input("enter new input: ")
+#    old_string = string
+#    string = new_string
+#    print("old string was: " + old_string)
+#    print("string is: " + string)
+#    print(sample(old_string,string))
 
 while True:
     conn, addr = s.accept()
