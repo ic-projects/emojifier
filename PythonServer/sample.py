@@ -713,7 +713,7 @@ tags = [['happy', 'joy', 'pleased', 'smile'], ['happy', 'joy', 'haha', 'smiley']
 
 wordvec = gensim.models.Word2Vec.load_word2vec_format(os.getcwd() + '/GoogleNews-vectors-negative300.bin', binary=True)
 
-threshold = 0.01 # score at which emoji is chosen
+threshold = 0 # score at which emoji is chosen
 
 num_emojis = 3 # maximum number of emojis to return
 decay_choose = 10 # decay in emoji value based on how many emojis already chosen
@@ -870,6 +870,16 @@ s.bind((TCP_IP, TCP_PORT))
 s.listen(1)
 
 print("Server is running.")
+
+string = ""
+while True:
+    next_char = raw_input("enter next char: ")
+    old_string = string
+    string = string + next_char
+    print("old string was: " + old_string)
+    print("string is: " + string)
+    print(sample(old_string,string))
+    
 
 while True:
     conn, addr = s.accept()
